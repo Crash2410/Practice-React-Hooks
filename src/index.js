@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 const App = () => {
@@ -10,8 +10,7 @@ const App = () => {
             <div>
                 <button onClick={() => setValue((v) => v + 1)}>+</button>
                 <button onClick={() => setVisible(false)}>hide</button>
-                {/* <ClassCounter value={value} /> */}
-                <HookCounter value={value} />
+                <Notification />
             </div>
         );
     } else {
@@ -19,32 +18,50 @@ const App = () => {
     }
 };
 
-const HookCounter = ({ value }) => {
+
+// const HookCounter = ({ value }) => {
+
+//     // componentDidMount
+//     useEffect(() => {
+//         console.log('componentDidMount');
+//     }, []);
+
+//     // componentDidUpdate
+//     useEffect(() => {
+//         console.log('componentDidUpdate');
+//     });
+
+//     // componentWillUnmount
+//     useEffect(() => {
+//         return () => {
+//             console.log('componentWillUnmount')
+//         }
+//     }, []);
+
+
+
+
+//     return <p>{value}</p>;
+// }
+
+const Notification = () => {
+    const [visible, setVisible] = useState(true)
 
     useEffect(() => {
-        console.log(' useEffect');
+        const timeout = setTimeout(() => {
+            setVisible(false)
+        }, 2500);
+        return () => clearTimeout(timeout);
+    }, [])
 
-        return () => console.log('clear');
-    }, [value]);
-
-    return <p>{value}</p>;
-}
-
-class ClassCounter extends Component {
-    componentDidMount() {
-        console.log('class:mount');
-    }
-    componentDidUpdate(props) {
-        console.log('class:update');
-    }
-    componentWillUnmount() {
-        console.log('class:unmount');
-    }
-
-    render() {
+    if (visible) {
         return (
-            <p>{this.props.value}</p>
-        )
+            <div>
+                <p>Hello</p>
+            </div>
+        );
+    } else {
+        return null;
     }
 }
 
