@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
+
 const App = () => {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(1);
     const [visible, setVisible] = useState(true);
 
     if (visible) {
@@ -10,7 +11,7 @@ const App = () => {
             <div>
                 <button onClick={() => setValue((v) => v + 1)}>+</button>
                 <button onClick={() => setVisible(false)}>hide</button>
-                <Notification />
+                <PlanetInfo id={value} />
             </div>
         );
     } else {
@@ -18,52 +19,27 @@ const App = () => {
     }
 };
 
+const PlanetInfo = ({ id }) => {
 
-// const HookCounter = ({ value }) => {
-
-//     // componentDidMount
-//     useEffect(() => {
-//         console.log('componentDidMount');
-//     }, []);
-
-//     // componentDidUpdate
-//     useEffect(() => {
-//         console.log('componentDidUpdate');
-//     });
-
-//     // componentWillUnmount
-//     useEffect(() => {
-//         return () => {
-//             console.log('componentWillUnmount')
-//         }
-//     }, []);
-
-
-
-
-//     return <p>{value}</p>;
-// }
-
-const Notification = () => {
-    const [visible, setVisible] = useState(true)
+    const [name, setName] = useState(null);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            setVisible(false)
-        }, 2500);
-        return () => clearTimeout(timeout);
-    }, [])
+        let cancelled = false;
 
-    if (visible) {
-        return (
-            <div>
-                <p>Hello</p>
-            </div>
-        );
-    } else {
-        return null;
-    }
-}
+        fetch(`https://swapi.py4e.com/api/planets/${id}/`)
+            .then((res) => res.json())
+            .then((data) => !cancelled && setName(data.name));
+        return () => cancelled = true;
+    }, [id]);
+
+
+
+    return (
+        <div>
+            {id} - {name}
+        </div>
+    );
+};
 
 
 ReactDOM.render(
